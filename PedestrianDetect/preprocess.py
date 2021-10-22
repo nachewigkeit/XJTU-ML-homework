@@ -40,18 +40,20 @@ def getNegImages(path, multiple=1):
 
 
 if __name__ == "__main__":
-    feature = getPosImages(r"E:\dataset\INRIAPerson\96X160H96\Train\pos", 16)
+    path = r"E:\AI\dataset\INRIAPerson"
+
+    feature = getPosImages(os.path.join(path, r"96X160H96\Train\pos"), 16)
     print("训练集正例数量：", feature.shape[0])
     np.save("data/trainPos.npy", feature)
 
-    feature = getPosImages(r"E:\dataset\INRIAPerson\70X134H96\Test\pos", 3)
+    feature = getPosImages(os.path.join(path, r"70X134H96\Test\pos"), 3)
     print("测试集正例数量：", feature.shape[0])
     np.save("data/testPos.npy", feature)
 
-    feature = getNegImages(r"E:\dataset\INRIAPerson\Train\neg", 2)
+    feature = getNegImages(os.path.join(path, r"Train\neg"), 2)
     print("训练集负例数量：", feature.shape[0])
     np.save("data/trainNeg.npy", feature)
 
-    feature = getNegImages(r"E:\dataset\INRIAPerson\Test\neg", 2)
+    feature = getNegImages(os.path.join(path, r"Test\neg"), 2)
     print("测试集负例数量：", feature.shape[0])
     np.save("data/testNeg.npy", feature)
