@@ -1,6 +1,6 @@
 import numpy as np
 import cv2 as cv
-from sklearn.externals import joblib
+import joblib
 import matplotlib.pyplot as plt
 from time import time
 
@@ -50,9 +50,9 @@ def NMS(dets, scores, thres):
         # 计算当前概率最大矩形框与其他矩形框的相交框的坐标
         # 由于numpy的broadcast机制，得到的是向量
         xx1 = np.maximum(x1[i], x1[order[1:]])
-        yy1 = np.minimum(y1[i], y1[order[1:]])
+        yy1 = np.maximum(y1[i], y1[order[1:]])
         xx2 = np.minimum(x2[i], x2[order[1:]])
-        yy2 = np.maximum(y2[i], y2[order[1:]])
+        yy2 = np.minimum(y2[i], y2[order[1:]])
 
         # 计算相交框的面积,注意矩形框不相交时w或h算出来会是负数，需要用0代替
         w = np.maximum(0.0, xx2 - xx1 + 1)

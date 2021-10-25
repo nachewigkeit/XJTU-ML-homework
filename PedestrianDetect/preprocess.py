@@ -40,7 +40,7 @@ def getNegImages(path, multiple=1):
 
 
 if __name__ == "__main__":
-    path = r"E:\AI\dataset\INRIAPerson"
+    path = r"E:\dataset\INRIAPerson"
     negRate = 2
 
     feature = getPosImages(os.path.join(path, r"96X160H96\Train\pos"), 16)
