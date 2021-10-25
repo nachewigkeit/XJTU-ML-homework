@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 
 def getPosImages(path, border):
-    hog = cv.HOGDescriptor()
+    hog = cv.HOGDescriptor((64, 128), (16, 16), (8, 8), (8, 8), 9)
     feature = []
     for root, dirs, files in os.walk(path):
         for file in tqdm(files):
@@ -21,7 +21,7 @@ def getPosImages(path, border):
 
 
 def getNegImages(path, multiple=1):
-    hog = cv.HOGDescriptor()
+    hog = cv.HOGDescriptor((64, 128), (16, 16), (8, 8), (8, 8), 9)
     feature = []
     for root, dirs, files in os.walk(path):
         for file in tqdm(files):
@@ -41,19 +41,20 @@ def getNegImages(path, multiple=1):
 
 if __name__ == "__main__":
     path = r"E:\AI\dataset\INRIAPerson"
+    negRate = 2
 
     feature = getPosImages(os.path.join(path, r"96X160H96\Train\pos"), 16)
-    print("训练集正例数量：", feature.shape[0])
-    np.save("data/trainPos.npy", feature)
+    print("训练集正例：", feature.shape)
+    np.save("data/" + str(negRate) + "/trainPos.npy", feature)
 
     feature = getPosImages(os.path.join(path, r"70X134H96\Test\pos"), 3)
-    print("测试集正例数量：", feature.shape[0])
-    np.save("data/testPos.npy", feature)
+    print("测试集正例：", feature.shape)
+    np.save("data/" + str(negRate) + "/testPos.npy", feature)
 
-    feature = getNegImages(os.path.join(path, r"Train\neg"), 2)
-    print("训练集负例数量：", feature.shape[0])
-    np.save("data/trainNeg.npy", feature)
+    feature = getNegImages(os.path.join(path, r"Train\neg"), negRate)
+    print("训练集负例：", feature.shape)
+    np.save("data/" + str(negRate) + "/trainNeg.npy", feature)
 
-    feature = getNegImages(os.path.join(path, r"Test\neg"), 2)
-    print("测试集负例数量：", feature.shape[0])
-    np.save("data/testNeg.npy", feature)
+    feature = getNegImages(os.path.join(path, r"Test\neg"), negRate)
+    print("测试集负例：", feature.shape)
+    np.save("data/" + str(negRate) + "/testNeg.npy", feature)

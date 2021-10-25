@@ -16,12 +16,13 @@ def getData(posPath, negPath):
     return x, y
 
 
-trainX, trainY = getData(r"data/trainPos.npy", r"data/trainNeg.npy")
-testX, testY = getData(r"data/testPos.npy", r"data/testNeg.npy")
+negRate = 2
+trainX, trainY = getData("data/" + str(negRate) + "/trainPos.npy", "data/" + str(negRate) + "/trainNeg.npy")
+testX, testY = getData("data/" + str(negRate) + "/testPos.npy", "data/" + str(negRate) + "/testNeg.npy")
 
 clf = svm.SVC(kernel="linear", probability=True)
 clf.fit(trainX, trainY)
-joblib.dump(clf, r'weight/svm')
+joblib.dump(clf, r'weight/svm' + str(negRate))
 
 trainYPred = clf.predict(trainX)
 print("测试集准确率：", np.mean(trainYPred == trainY))
