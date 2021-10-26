@@ -8,7 +8,6 @@ kers = ['linear', 'poly', 'rbf', 'sigmoid']
 cs = [0.1, 1, 10]
 gammas = [3e-4, 3e-3, 3e-2, 3e-1]
 
-trainX, trainY = getData("data/" + str(negRate) + "/trainPos.npy", "data/" + str(negRate) + "/trainNeg.npy")
 testX, testY = getData("data/" + str(negRate) + "/testPos.npy", "data/" + str(negRate) + "/testNeg.npy")
 
 ax = plt.gca()

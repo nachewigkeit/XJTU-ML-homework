@@ -68,33 +68,36 @@ def NMS(dets, scores, thres):
     return temp
 
 
-def pipeline(clf, clsThres, iouThres):
-    file = r"E:\AI\dataset\INRIAPerson\Train\pos\crop001001.png"
+def pipeline(clf, clsThres, iouThres, ifNMS):
+    file = r"E:\AI\dataset\INRIAPerson\Train\pos\crop_000607.png"
     img = cv.imread(file)
     rects, conf = detectMultiScale(img, clf, clsThres, winStride=4, scale=1.2)
-    pos = NMS(rects, conf, iouThres)
-    for (y1, x1, y2, x2) in rects[pos, :]:
-        cv.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    if ifNMS:
+        pos = NMS(rects, conf, iouThres)
+        for (y1, x1, y2, x2) in rects[pos, :]:
+            cv.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    else:
+        for (y1, x1, y2, x2) in rects:
+            cv.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
     return img[:, :, ::-1]
 
 
 clf = joblib.load(r"weight/svm2")
-clsThreshes = [0.5, 0.9, 0.99]
-iouThreshes = [0.2, 0.4, 0.6]
-images = []
-for clsThres in clsThreshes:
-    for iouThres in iouThreshes:
-        print("clsThres", clsThres, "IoUThres:", iouThres)
-        images.append(pipeline(clf, clsThres, iouThres))
 
-clsLen = len(clsThreshes)
-iouLen = len(iouThreshes)
-plt.figure(figsize=(10 * iouLen, 10 * clsLen))
-for i in range(clsLen):
-    for j in range(iouLen):
-        plt.subplot(clsLen, iouLen, i * iouLen + j + 1)
-        plt.title("clsThres:" + str(clsThreshes[i]) + ",iouThres:" + str(iouThreshes[j]))
-        plt.xticks([])
-        plt.xticks([])
-        plt.imshow(images[i])
+plt.figure(figsize=(20, 10))
+plt.subplot(121)
+plt.title('beforeNMS')
+img = pipeline(clf, 0.99, 0.1, False)
+plt.xticks([])
+plt.yticks([])
+plt.imshow(img)
+
+plt.subplot(122)
+plt.title('afterNMS')
+img = pipeline(clf, 0.99, 0.1, True)
+plt.xticks([])
+plt.yticks([])
+plt.imshow(img)
+
+plt.savefig(r'image/NMS.png')
 plt.show()
