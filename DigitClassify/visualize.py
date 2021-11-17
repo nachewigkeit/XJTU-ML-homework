@@ -57,6 +57,7 @@ lossPlot(train, test, xticks, xlabel)
 plt.show()
 '''
 
+'''
 train = [0.0154, 0.0058, 0.0317, 0.014]
 test = [0.0527, 0.0488, 0.0551, 0.0471]
 xticks = ["no", "norm", "rotate", "norm&rotate"]
@@ -71,4 +72,22 @@ plt.ylabel("Loss", fontsize=12)
 plt.bar(x, train, width=width, label='train')
 plt.bar(x + width, test, width=width, label='test')
 plt.legend()
+plt.show()
+'''
+
+'''
+train = [1.0156, 0.2041, 0.0721, 0.0345, 0.0252]
+test = [0.9805, 0.1916, 0.0707, 0.0396, 0.0319]
+xticks = [1, 2, 3, 4, 5]
+xlabel = "Number of conv layers"
+lossPlot(train, test, xticks, xlabel)
+plt.show()
+'''
+
+
+train = [0.2579, 0.1303, 0.0638, 0.0294, 0.0166]
+test = [0.2639, 0.1192, 0.0679, 0.0354, 0.0284]
+xticks = [8, 16, 32, 64, 128]
+xlabel = "Number of conv channels"
+lossPlot(train, test, xticks, xlabel)
 plt.show()
