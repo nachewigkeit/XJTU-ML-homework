@@ -4,9 +4,9 @@ import torch.nn.functional as F
 
 
 class MLP(nn.Module):
-    def __init__(self, hidden=30, layer=1):
+    def __init__(self, hidden=30, layer=1, rate=0.5):
         super(MLP, self).__init__()
-        model = [nn.Linear(784, hidden), nn.ReLU()]
+        model = [nn.Linear(784, hidden), nn.ReLU(), nn.Dropout(rate)]
         for i in range(layer - 1):
             model += [nn.Linear(hidden, hidden), nn.ReLU()]
         model.append(nn.Linear(hidden, 10))

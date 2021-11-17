@@ -45,7 +45,7 @@ def main():
     epochs = 10
     gamma = 0.7
 
-    device = torch.device("cuda")
+    device = torch.device("cpu")
     train_kwargs = {'batch_size': train_batch_size}
     test_kwargs = {'batch_size': test_batch_size}
     cuda_kwargs = {'num_workers': 1,
@@ -54,31 +54,38 @@ def main():
     train_kwargs.update(cuda_kwargs)
     test_kwargs.update(cuda_kwargs)
 
-    transform = transforms.Compose([
+    train_transform = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize((0.1307,), (0.3081,))
+        # transforms.Normalize((0.1307,), (0.3081,)),
+        transforms.RandomRotation(degrees=(0, 15))
     ])
-    dataset1 = datasets.MNIST('./data', train=True, download=True, transform=transform)
-    dataset2 = datasets.MNIST('./data', train=False, transform=transform)
+    test_transform = transforms.Compose([
+        transforms.ToTensor(),
+        # transforms.Normalize((0.1307,), (0.3081,))
+    ])
+    dataset1 = datasets.MNIST('./data', train=True, download=True, transform=train_transform)
+    dataset2 = datasets.MNIST('./data', train=False, transform=test_transform)
     train_loader = DataLoader(dataset1, **train_kwargs)
     test_loader = DataLoader(dataset2, **test_kwargs)
 
-    for hidden in [10, 30, 100, 300, 1000]:
+    for hidden in [1000]:
         for layer in [1]:
-            model = MLP(hidden, layer).to(device)
-            optimizer = optim.Adam(model.parameters())
-            scheduler = StepLR(optimizer, step_size=1, gamma=gamma)
-            start = time()
-            for epoch in range(1, epochs + 1):
-                train(model, device, train_loader, optimizer)
-                scheduler.step()
+            for rate in [0.3]:
+                model = MLP(hidden, layer, rate).to(device)
+                optimizer = optim.Adam(model.parameters())
+                scheduler = StepLR(optimizer, step_size=1, gamma=gamma)
+                start = time()
+                for epoch in range(1, epochs + 1):
+                    train(model, device, train_loader, optimizer)
+                    test(model, device, test_loader)
+                    scheduler.step()
 
-            print("hidden: ", hidden, " layer: ", layer)
-            print("train:")
-            test(model, device, train_loader)
-            print("test:")
-            test(model, device, test_loader)
-            print("Time: ", time() - start)
+                print("hidden: ", hidden, " layer: ", layer, " rate: ", rate)
+                print("train:")
+                test(model, device, train_loader)
+                print("test:")
+                test(model, device, test_loader)
+                print("Time: ", time() - start)
 
     # torch.save(model.state_dict(), "weight/mnist_cnn.pt")
 
