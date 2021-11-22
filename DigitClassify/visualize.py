@@ -11,7 +11,6 @@ def lossPlot(train, test, xticks, xlabel):
     plt.legend()
 
 
-'''
 plt.figure(figsize=(10, 5))
 train = [0.2481, 0.1011, 0.0309, 0.0088, 0.0017]
 test = [0.2626, 0.1254, 0.0703, 0.0544, 0.0538]
@@ -27,37 +26,34 @@ xlabel = "Number of hidden neurons"
 plt.subplot(122)
 plt.title("Unreasonable", fontsize=12)
 lossPlot(train, test, xticks, xlabel)
-plt.show()
-'''
+plt.savefig("image/MLPNeuron.png", bbox_inches="tight")
 
-'''
+plt.figure()
 train = [0.1055, 0.088, 0.0917, 0.0907, 0.1006]
 test = [0.125, 0.1107, 0.1178, 0.1212, 0.1346]
 xticks = [1, 2, 3, 4, 5]
 xlabel = "Number of hidden layers"
 lossPlot(train, test, xticks, xlabel)
-plt.show()
-'''
+plt.savefig("image/MLPLayer.png", bbox_inches="tight")
 
-'''
+plt.figure()
 train = [0.0026, 0.0039, 0.0056, 0.0080, 0.0121]
 test = [0.0535, 0.05, 0.0492, 0.0499, 0.0515]
 xticks = [0.1, 0.2, 0.3, 0.4, 0.5]
 xlabel = "Dropout Rate"
 lossPlot(train, test, xticks, xlabel)
-plt.show()
-'''
+plt.savefig("image/dropout.png", bbox_inches="tight")
 
-'''
+plt.figure()
 train = [0.008, 0.014, 0.0176, 0.021]
 test = [0.0475, 0.0471, 0.0498, 0.0497]
 xticks = [5, 10, 15, 20]
 xlabel = "Max Rotation Angle"
 lossPlot(train, test, xticks, xlabel)
-plt.show()
-'''
+plt.savefig("image/rotation.png", bbox_inches="tight")
 
-'''
+
+plt.figure()
 train = [0.0154, 0.0058, 0.0317, 0.014]
 test = [0.0527, 0.0488, 0.0551, 0.0471]
 xticks = ["no", "norm", "rotate", "norm&rotate"]
@@ -72,22 +68,21 @@ plt.ylabel("Loss", fontsize=12)
 plt.bar(x, train, width=width, label='train')
 plt.bar(x + width, test, width=width, label='test')
 plt.legend()
-plt.show()
-'''
+plt.savefig("image/preprocess.png", bbox_inches="tight")
 
-'''
+
+plt.figure()
 train = [1.0156, 0.2041, 0.0721, 0.0345, 0.0252]
 test = [0.9805, 0.1916, 0.0707, 0.0396, 0.0319]
 xticks = [1, 2, 3, 4, 5]
 xlabel = "Number of conv layers"
 lossPlot(train, test, xticks, xlabel)
-plt.show()
-'''
+plt.savefig("image/CONVLayer.png", bbox_inches="tight")
 
-
+plt.figure()
 train = [0.2579, 0.1303, 0.0638, 0.0294, 0.0166]
 test = [0.2639, 0.1192, 0.0679, 0.0354, 0.0284]
 xticks = [8, 16, 32, 64, 128]
 xlabel = "Number of conv channels"
 lossPlot(train, test, xticks, xlabel)
-plt.show()
+plt.savefig("image/CONVChannel.png", bbox_inches="tight")
