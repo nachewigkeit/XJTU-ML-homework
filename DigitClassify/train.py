@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 
-def train(model, device, train_loader, optimizer):
+def train(model, device, train_loader, optimizer, writer):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
@@ -18,6 +18,12 @@ def train(model, device, train_loader, optimizer):
         loss = F.nll_loss(output, target)
         loss.backward()
         optimizer.step()
+
+        writer.add_scalar("loss", loss, train.step)
+        train.step += 1
+
+
+train.step = 0
 
 
 def test(model, device, test_loader):
@@ -46,7 +52,7 @@ def main():
     epochs = 10
     gamma = 0.7
 
-    device = torch.device("cpu")
+    device = torch.device("cuda")
     train_kwargs = {'batch_size': train_batch_size}
     test_kwargs = {'batch_size': test_batch_size}
     cuda_kwargs = {'num_workers': 1,
@@ -69,13 +75,13 @@ def main():
     train_loader = DataLoader(dataset1, **train_kwargs)
     test_loader = DataLoader(dataset2, **test_kwargs)
 
-    writer = SummaryWriter(r'log')
+    writer = SummaryWriter(r'log/momentum/0.5')
     model = Conv(128, 5).to(device)
-    optimizer = optim.Adam(model.parameters())
+    optimizer = optim.SGD(model.parameters(), lr=1e-2, momentum=0.5)
     scheduler = StepLR(optimizer, step_size=1, gamma=gamma)
     start = time()
     for epoch in range(1, epochs + 1):
-        train(model, device, train_loader, optimizer)
+        train(model, device, train_loader, optimizer, writer)
         scheduler.step()
 
     print("train:")
@@ -84,7 +90,7 @@ def main():
     test(model, device, test_loader)
     print("Time: ", time() - start)
 
-    torch.save(model.state_dict(), "weight/conv.pt")
+    # torch.save(model.state_dict(), "weight/conv.pt")
 
 
 if __name__ == '__main__':

@@ -3,4 +3,5 @@ __pycache__/
 data/
 weight/
 image/
+log/
 try.py
